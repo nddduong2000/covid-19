@@ -1,0 +1,479 @@
+<div class="my-project">
+  <div class="header-page">
+    <div class="container d-flex align-items-center">
+      <div class="mt-2 logo mr-auto">
+        <h1>
+          <div routerlink="/portal" href="https://tiemchungcovid19.gov.vn/portal">
+            <img class="mt-1" alt="" src="https://tiemchungcovid19.gov.vn/assets/portal/img/u7.png"
+                 style="padding: 0;margin: 0;max-height: 40px;">
+            <span class="text-white mx-2 text-center text-header">
+                CỔNG THÔNG TIN TIÊM CHỦNG COVID-19
+            </span>
+          </div>
+        </h1>
+      </div>
+      <div class="mt-2 webView">
+        <nav class="nav-menu" style="display: flex">
+          <ul class="nav-header">
+            <li>Trang chủ</li>
+          </ul>
+          <ul class="nav-header">
+            <li>Đăng ký tiêm <img src="assets/images/rounded-down.svg" style="max-width: 16px; margin-bottom: 3px"/>
+            </li>
+          </ul>
+          <ul class="nav-header">
+            <li>Tra cúu <img src="assets/images/rounded-down.svg" style="max-width: 16px; margin-bottom: 3px"/></li>
+          </ul>
+          <ul class="nav-header">
+            <li>Tài liệu</li>
+          </ul>
+          <ul class="nav-header" *ngIf="!userName" (click)="login()" >
+            <li>
+              <a class="login">
+                Đăng nhập
+              </a>
+            </li>
+          </ul>
+          <ul class="nav-header" *ngIf="userName">
+            <li>
+              <i class="fa fa-user"></i> <img src="assets/images/rounded-down.svg" style="max-width: 16px; margin-bottom: 3px"/>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="ms-3 mt-2 webView">
+        <div class="col-12 text-right" style="height:30px;">
+          <a class="text-white border-bottom-selected" style="cursor: pointer;" title="Vietnamese">VN</a>
+          <span class="text-white px-2 ps-2">|</span>
+          <a class="text-white" style="cursor: pointer;text-decoration: none" title="International">EN</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-page">
+    <div *ngIf="!isLogin">
+        <div class="row webView">
+          <div class="title-body d-flex justify-content-between">
+            <div class="text-right" style="font-size: 28px; font-weight: 400">
+              <div>Tra cứu chứng nhận tiêm</div>
+            </div>
+            <div class="text-left mt-2" style="font-size: 14px;">
+              <a style="cursor: pointer; color:red;" title="Vietnamese">Trang chủ</a>
+              <span class="px-2 ps-2">/</span>
+              <a style="cursor: pointer;text-decoration: none" title="International">Tra cứu chứng nhận tiêm</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row form">
+          <div class="col-lg-2"></div>
+          <div class="border-form shadow-sm rounded col-md-8">
+            <div class="row" [formGroup]="inputForm">
+              <div class="col-lg-2">
+                <div class="mt-1">Họ và tên <span class="text-danger">(*)</span></div>
+                <div>
+                  <input class="form-control mt-2" formControlName="name" type="text" placeholder="Họ và tên"
+                         [ngClass]="{ 'is-invalid': f.name.touched && f.name.errors }" />
+                  <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
+                    <div *ngIf="f.name.errors.required">Họ và tên không được để trống</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <div class="mt-1">Ngày sinh <span class="text-danger">(*)</span></div>
+                <div class="mt-2">
+                  <div class="form-group input-date" style="position: relative">
+                    <input type="text"
+                           placeholder="Ngày/Tháng/Năm"
+                           class="form-control"
+                           bsDatepicker
+                           [bsValue]="bsValue"
+                           [daysDisabled]="[6,0]" (bsValueChange)="changeDate($event)"
+                           [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }">
+                    <div class="icon-calender">
+                      <svg class="mat-datepicker-toggle-default-icon ng-star-inserted" fill="#ced4da" focusable="false" height="24px" viewBox="0 0 24 24" width="24px"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"></path></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <div class="mt-1">Giới tính <span class="text-danger">(*)</span></div>
+                <select class="form-select form-control mt-2">
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                </select>
+              </div>
+              <div class="col-lg-2">
+                <div class="mt-1">Số điện thoại <span class="text-danger">(*)</span></div>
+                <div>
+                  <input class="form-control mt-2" formControlName="phoneNumber" type="text" placeholder="Số điện thoại"
+                         [ngClass]="{ 'is-invalid': f.phoneNumber.touched && f.phoneNumber.errors }" />
+                  <div *ngIf="f.phoneNumber.touched && f.phoneNumber.errors" class="invalid-feedback">
+                    <div *ngIf="f.phoneNumber.errors.required">Số điện thoại không được để trống</div>
+                    <div *ngIf="f.phoneNumber.errors.pattern">Số điện thoại không hợp lệ</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <div class="mt-1">CCCD/HC</div>
+                <div>
+                  <input class="form-control mt-2" formControlName="cccd" type="text" placeholder="CCCD/HC"
+                         [ngClass]="{ 'is-invalid': f.cccd.touched && f.cccd.errors }"  />
+                  <div *ngIf="f.cccd.touched && f.cccd.errors" class="invalid-feedback">
+                    <div *ngIf="f.cccd.errors.minlength || f.cccd.errors.maxlength">Định dạng 07-20 số và không chứa ký tự đặc biệt</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <div class="mt-1">Số thẻ BHYT</div>
+                <div>
+                  <input class="form-control mt-2" formControlName="bhyt" type="text" placeholder="Số thẻ BHYT"
+                         [ngClass]="{ 'is-invalid': f.bhyt.touched && f.bhyt.errors }"  />
+                  <div *ngIf="f.bhyt.touched && f.bhyt.errors" class="invalid-feedback">
+                    <div *ngIf="f.bhyt.errors.minlength || f.bhyt.errors.maxlength">Số thẻ BHYT bao gồm 10 hoặc 15 ký tự và không chứa ký tự đặc biệt</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 text-danger text-center">
+              <i style="font-weight: 600">Ghi chú:</i> <i> Nếu bạn đã tiêm nhưng chưa được ghi nhận, hãy liên hệ với cơ sở tiêm và đề nghị cập nhật thông tin lên Nền tảng tiêm chủng để có thể nhận được Chứng nhận tiêm hoặc phản ánh thông tin mũi tiêm <span style="font-weight: 600; text-decoration: underline">tại đây</span>.</i>
+            </div>
+
+            <div class="mt-3 text-center">
+              <button class="btn btn-outline-primary border-radius" (click)="resetForm()"> <i class="fa fa-refresh mx-1"></i>Nhập lại</button>
+              <button class="mx-3 btn btn-primary border-radius" [disabled]="inputForm.invalid" (click)="searchInfor()"><i class="fa fa-search mx-1"></i>Tra cứu</button>
+          </div>
+          <div class="col-lg-2"></div>
+
+          <div class="row infor-custormer mt-5" *ngIf="isShowInfor">
+            <div class="col-md-12">
+              <div class="row col-12">
+                <div class="col-lg-9">
+                  <div class="row col-12 text-center" style="font-weight: 600">
+                    <p class="mb-1">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                    <p>Độc lập - Tự do - Hạnh phúc</p>
+                  </div>
+                  <div class="row col-12 text-center">
+                    <span class="mt-4 mb-4 text-covid">CHỨNG NHẬN TIÊM CHỦNG COVID-19</span>
+                  </div>
+
+                  <div class="row infor col-12">
+                    <div class="col-lg-4">
+                      <p class="title mb-1">Họ và tên</p>
+                      <p class="name">{{f.name.value}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                      <p class="title mb-1">Ngày sinh</p>
+                      <p class="name">{{this.bsValue}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                      <p class="title mb-1">CCCD/HC</p>
+                      <p class="name">{{f.cccd.value}}</p>
+                    </div>
+                  </div>
+
+                  <div class="row infor col-12">
+                    <div class="col-lg-4">
+                      <p class="title mb-1">Số thẻ BHYT </p>
+                      <p class="name">{{f.bhyt.value}}</p>
+                    </div>
+                    <div class="col-lg-4">
+                      <p class="title mb-1">Số điện thoại</p>
+                      <p class="name">{{f.phoneNumber.value}}</p>
+                    </div>
+                  </div>
+
+                  <div class="row infor col-12">
+                    <p class="title mb-1">Địa chỉ</p>
+                    <p class="name">{{addressInput}}</p>
+                  </div>
+
+                  <div class="row infor col-12">
+                    <p class="title mb-1">Kết luận</p>
+                    <p class="name">Đã được tiêm phòng vắc xin phòng bệnh Covid-19</p>
+                  </div>
+
+                  <div class="col-12 table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                      <tr class="text-center bg-light">
+                        <th>Mũi số</th>
+                        <th>Thời gian tiêm</th>
+                        <th>Tên vắc xin</th>
+                        <th>Số lô</th>
+                        <th>Nơi tiêm</th>
+                      </tr>
+                      </thead>
+                      <tbody class="text-center">
+                      <tr>
+                        <td>1</td>
+                        <td>{{dateTwo}}</td>
+                        <td>COVID-19 Vaccine (Vero Cell), Inactivated (Sinopharm)</td>
+                        <td>{{codeOne}}</td>
+                        <td>Huyện Tiên Du Bắc Ninh</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>{{dateOne}}</td>
+                        <td>COVID-19 Vaccine (Vero Cell), Inactivated (Sinopharm)</td>
+                        <td>{{codeTwo}}</td>
+                        <td>Huyện Tiên Du Bắc Ninh</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 p-4 border-radius" style="background: #347846">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <img src="https://tiemchungcovid19.gov.vn/assets/portal/img/u7.png" style="max-width: 100px" />
+                    </div>
+                    <div class="col-12 text-center mt-2 mb-2 text-white">
+                      <h4>ĐÃ TIÊM 2 MŨI VẮC XIN</h4>
+                    </div>
+                    <div class="col-12 text-center mt-2 mb-2 text-white">
+                      <img src="https://printgo.vn/uploads/media/790919/tao-ma-qr-code-san-pham-1_1620927223.jpg" style="max-width: 212px" />
+                    </div>
+                    <div class="col-12 mt-3">
+                      <div class="p-3 border-radius bg-white">
+                        <div class="d-flex text-dark">
+                          <div><img src="assets/images/business-man.svg" style="max-width: 15px"></div>
+                          <div class="mx-2 mt-1">
+                            <p class="title mb-1">Họ và tên</p>
+                            <p class="name">{{f.name.value}}</p>
+                          </div>
+                        </div>
+                        <div class="d-flex text-dark">
+                          <div><img src="assets/images/birthday-cake.svg" style="max-width: 15px"></div>
+                          <div class="mx-2 mt-1">
+                            <p class="title mb-1">Ngày sinh</p>
+                            <p class="name">{{this.bsValue}}</p>
+                          </div>
+                        </div>
+                        <div class="d-flex text-dark">
+                          <div><img src="assets/images/ui-v-card.svg" style="max-width: 15px"></div>
+                          <div class="mx-2 mt-1">
+                            <p class="title mb-1">CCCD/HC</p>
+                            <p class="name">{{f.cccd.value}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+
+    <!--Login-->
+    <div *ngIf="isLogin">
+      <div class="row webView">
+        <div class="title-body d-flex justify-content-between">
+          <div class="text-right" style="font-size: 28px; font-weight: 400">
+            <div>Đăng nhập tổ chức</div>
+          </div>
+          <div class="text-left mt-2" style="font-size: 14px;">
+            <a style="cursor: pointer; color:red;" title="Vietnamese">Trang chủ</a>
+            <span class="px-2 ps-2">/</span>
+            <a style="cursor: pointer;text-decoration: none" title="International">Tra cứu chứng nhận tiêm</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row form">
+        <div class="col-lg-4"></div>
+        <div class="border-form shadow-sm rounded col-md-3">
+          <div class="row" [formGroup]="loginForm">
+            <div style="text-align: center">
+              <img src="https://tiemchungcovid19.gov.vn/assets/portal/img/logoboyte.png" style="max-width: 120px"/>
+            </div>
+            <div class="p-2">
+              <div>
+                <div class="title mb-1">Số điện thoại tổ chức</div>
+                <input type="text" class="form-control" formControlName="phoneRegis" placeholder="Số điện thoại tổ chức"
+                       [ngClass]="{ 'is-invalid': lf.phoneRegis.touched && lf.phoneRegis.errors }"/>
+                <div *ngIf="lf.phoneRegis.touched && lf.phoneRegis.errors" class="invalid-feedback">
+                  <div *ngIf="lf.phoneRegis.errors.required">Số điện thoại không được để trống</div>
+                </div>
+              </div>
+              <div>
+                <div class="title mb-1">Mật khẩu</div>
+                <input type="password" class="form-control" formControlName="pass" placeholder="Mật khẩu"
+                       [ngClass]="{ 'is-invalid': lf.pass.touched && lf.pass.errors }"/>
+                <div *ngIf="lf.pass.touched && lf.pass.errors" class="invalid-feedback">
+                  <div *ngIf="lf.pass.errors.required">Mật khẩu không được để trống</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 col-12 border-radius btn btn-primary" (click)="doLogin()">
+              Đăng nhập
+            </div>
+            <div class="mt-3 col-12 text-center">
+              Hoặc đăng ký tài khoản, nếu bạn chưa đăng ký !
+            </div>
+            <div class="mt-3 col-12 border-radius btn btn-outline-primary">
+              Đăng ký tài khoản tổ chức
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5"></div>
+      </div>
+    </div>
+
+    <footer class="pt-4" id="footer1" *ngIf="isShowInfor">
+      <div class="container">
+        <div class="row d-flex align-items-center text-white">
+          <div class="col-lg-5 text-footer-left">
+            <div class="copyright"> © Bản quyền thuộc <span
+              class="sfbold">TRUNG TÂM CÔNG NGHỆ PHÒNG, CHỐNG DỊCH COVID-19 QUỐC GIA Phát triển bởi <a
+              style="color: #e20030;">Viettel</a></span>
+            </div>
+            <div class="w-100 mt-2 mb-2"><img
+              class="img-fluid"
+              src="https://tiemchungcovid19.gov.vn/assets/portal/img/logo2bo.png"></div>
+          </div>
+          <div class="col-lg-7 text-footer-right">
+            <p>Tải sổ sức khỏe điện tử để đăng ký tiêm và nhận giấy chứng nhận tiêm</p>
+            <a class="btn btn-outline-distribution btn-icon-text button-app mb-2 ml-3"
+               href="https://drive.google.com/folderview?id=1iJBPoQILfA9AWA72qRE1HqtxJtzQpODm"
+               style="border-radius: 8px 8px 8px 0px;" target="_blank">
+              <img style="max-width: 18px" src="assets/images/google-play-brands.svg"> App tiêm di động (Cho HCM)
+            </a>
+            <a class="btn btn-outline-distribution btn-icon-text button-app ms-2 mb-2"
+               href="https://apps.apple.com/vn/app/s%E1%BB%95-s%E1%BB%A9c-kh%E1%BB%8Fe-%C4%91i%E1%BB%87n-t%E1%BB%AD/id1555911794?l=vi"
+               style="border-radius: 8px 8px 8px 0px;" target="_blank">
+              <i class="fa fa-apple"></i> App Store
+            </a>
+            <a class="btn btn-outline-distribution btn-icon-text button-app ms-2 mb-2"
+               href="https://play.google.com/store/apps/details?id=com.mohviettel.sskdt"
+               style="border-radius: 8px 8px 8px 0px;" target="_blank">
+              <img style="max-width: 18px" src="assets/images/google-play-brands.svg"> Google Play
+            </a>
+            <a class="btn btn-outline-distribution btn-icon-text button-app ms-2 mb-2"
+               href="https://appgallery.huawei.com/app/C104853229?sharePrepath=ag&amp;channelId=web&amp;detailType=0"
+               style="border-radius: 8px 8px 8px 0px;" target="_blank">
+              <img height="22px" src="https://tiemchungcovid19.gov.vn/assets/portal/img/huawei.png"
+                   style="margin-bottom: 2px;" width="22px"> App Gallery
+            </a>
+            <div class="w-100 mt-3"><a
+              href="https://tinnhiemmang.vn/danh-ba-tin-nhiem/tiemchungcovid19govvn-1626922195"
+              target="_blank"
+              title="Chung nhan Tin Nhiem Mang"><img
+              alt="Chung nhan Tin Nhiem Mang" height="auto"
+              src="	https://tinnhiemmang.vn/handle_cert?id=tiemchungcovid19.gov.vn" width="150px"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div class="tongDai" *ngIf="isShowInfor">
+      <img class="imgTongDai" src="https://tiemchungcovid19.gov.vn/assets/portal/img/hotline.png"> <span
+      class="webView">Tổng đài: 19009095</span>
+    </div>
+  </div>
+
+</div>
+
+<footer class="pt-4 pb-4" id="footer" *ngIf="!isShowInfor">
+  <div class="container">
+    <div class="row d-flex align-items-center text-white">
+      <div class="col-lg-5 text-footer-left">
+        <div class="copyright"> © Bản quyền thuộc <span
+          class="sfbold">TRUNG TÂM CÔNG NGHỆ PHÒNG, CHỐNG DỊCH COVID-19 QUỐC GIA Phát triển bởi <a
+          style="color: #e20030;">Viettel</a></span>
+        </div>
+        <div class="w-100 mt-2 mb-2"><img
+          class="img-fluid"
+          src="https://tiemchungcovid19.gov.vn/assets/portal/img/logo2bo.png"></div>
+        <input type="text" class="form-control" style="background-color: #2d2188; border-color: #2d2188; color: #2d2188"
+               [(ngModel)]="address" (change)="changeAddr()"/>
+      </div>
+      <div class="col-lg-7 text-footer-right">
+        <p>Tải sổ sức khỏe điện tử để đăng ký tiêm và nhận giấy chứng nhận tiêm</p>
+        <a class="btn btn-outline-distribution btn-icon-text button-app mb-2 ml-3"
+           href="https://drive.google.com/folderview?id=1iJBPoQILfA9AWA72qRE1HqtxJtzQpODm"
+           style="border-radius: 8px 8px 8px 0px;" target="_blank">
+          <img style="max-width: 18px" src="assets/images/google-play-brands.svg"> App tiêm di động (Cho HCM)
+        </a>
+        <a class="btn btn-outline-distribution btn-icon-text button-app ms-2 mb-2"
+           href="https://apps.apple.com/vn/app/s%E1%BB%95-s%E1%BB%A9c-kh%E1%BB%8Fe-%C4%91i%E1%BB%87n-t%E1%BB%AD/id1555911794?l=vi"
+           style="border-radius: 8px 8px 8px 0px;" target="_blank">
+          <i class="fa fa-apple"></i> App Store
+        </a>
+        <a class="btn btn-outline-distribution btn-icon-text button-app ms-2 mb-2"
+           href="https://play.google.com/store/apps/details?id=com.mohviettel.sskdt"
+           style="border-radius: 8px 8px 8px 0px;" target="_blank">
+          <img style="max-width: 18px" src="assets/images/google-play-brands.svg"> Google Play
+        </a>
+        <a class="btn btn-outline-distribution btn-icon-text button-app ms-2 mb-2"
+           href="https://appgallery.huawei.com/app/C104853229?sharePrepath=ag&amp;channelId=web&amp;detailType=0"
+           style="border-radius: 8px 8px 8px 0px;" target="_blank">
+          <img height="22px" src="https://tiemchungcovid19.gov.vn/assets/portal/img/huawei.png"
+               style="margin-bottom: 2px;" width="22px"> App Gallery
+        </a>
+        <div class="w-100 mt-3"><a
+          href="https://tinnhiemmang.vn/danh-ba-tin-nhiem/tiemchungcovid19govvn-1626922195"
+          target="_blank"
+          title="Chung nhan Tin Nhiem Mang"><img
+          alt="Chung nhan Tin Nhiem Mang" height="auto"
+          src="	https://tinnhiemmang.vn/handle_cert?id=tiemchungcovid19.gov.vn" width="150px"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="tongDai" *ngIf="!isShowInfor">
+  <img class="imgTongDai" src="https://tiemchungcovid19.gov.vn/assets/portal/img/hotline.png"/> <span class="webView">Tổng đài: 19009095</span>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modalOtp">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="font-size: 19px; font-weight: 600">Xác thực OTP</div>
+        <button type="button" class="close" (click)="cancel()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <img src="https://tiemchungcovid19.gov.vn/assets/portal/img/logoboyte.png" style="max-width: 139px" />
+          <div class="mt-2">Mã xác minh sẽ được gửi bằng tin nhắn đến</div>
+          <div class="mt-1">SĐT bạn đăng ký</div>
+        </div>
+        <div class="row mt-4" [formGroup]="otpForm">
+          <div class="col-12 d-flex justify-content-center align-items-center">
+            <input class="form-control mx-2 input-otp text-center" formControlName="otp1" type="text" />
+            <input class="form-control mx-2 input-otp text-center" formControlName="otp2" type="text" />
+            <input class="form-control mx-2 input-otp text-center" formControlName="otp3" type="text" />
+            <input class="form-control mx-2 input-otp text-center" formControlName="otp4" type="text" />
+            <input class="form-control mx-2 input-otp text-center" formControlName="otp5" type="text" />
+            <input class="form-control mx-2 input-otp text-center" formControlName="otp6" type="text" />
+          </div>
+        </div>
+        <div class="mt-4 text-center text-grey">
+          <div>Nếu bạn không nhận được tin nhắn, xin vui lòng thử lại sau:</div>
+          <div>
+            <countdown [config]="configTime"></countdown>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button class="btn btn-outline-primary border-radius" (click)="cancel()">Hủy bỏ</button>
+          <button class="mx-3 btn btn-primary border-radius" [disabled]="otpForm.invalid" (click)="accessOTP()">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
