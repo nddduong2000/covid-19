@@ -133,7 +133,8 @@ export class AppComponent implements OnInit {
     if (checkOTP) {
       this.isShowInfor = true;
       this.randomCodeCovid();
-      const date = moment(new Date(+(new Date()) - Math.floor(Math.random() * 10000000000)))
+      const oneYearFromNow = new Date();
+      const date = moment(oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() - 1))
         .format();
       this.dateTwo = moment((new Date(date).getTime() - 12000000000)).format('DD/MM/YYYY');
       this.dateOne = moment((new Date(date).getTime()) - 15000000000).format('DD/MM/YYYY')
